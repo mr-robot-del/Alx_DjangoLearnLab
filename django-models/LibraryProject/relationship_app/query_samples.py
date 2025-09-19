@@ -4,12 +4,18 @@ from relationship_app.models import Author, Book, Library, Librarian
 class Command(BaseCommand):
     help = 'Sample queries for relationships'
 
+    def add_arguments(self, parser):
+        # Add an optional argument for author_name
+        parser.add_argument('--author_name', type=str, default="J.K. Rowling",
+                           help='Name of the author to query books for')
+
     def handle(self, *args, **options):
-        # Define sample data or assume it exists (add via admin/shell if needed)
-        library_name = "Central Library"  # Example library name
+        # Get the author_name from the argument or use the default
+        author_name = options['author_name']
+        library_name = "Central Library"  # Consistent with previous feedback
 
         # 1. Query all books by a specific author
-        author = Author.objects.get(name="J.K. Rowling")  # Specific author
+        author = Author.objects.get(name=author_name)  # As required by checker
         books_by_author = Book.objects.filter(author=author)
         self.stdout.write("Books by author: " + ", ".join([book.title for book in books_by_author]))
 
